@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>필기장</title>
+    <style>
+      #memo {
+			width: 900px;
+			height: 500px;
+			padding: 10px;
+			border: 1px solid black;
+			overflow-y: scroll;
+			font-size: 15px;
+		}
+        body {
+            font-size: 15px;
+        }
+        .menu {
+            position: absolute;
+            display: none;
+            background-color: #f9f9f9;
+            width: 100px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+        .menu button {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 8px 16px;
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+        }
+        .menu button:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+  <h1>웹프로그래밍개론 필기장</h1>
+  <h2>마우스 오른쪽 버튼을 클릭하면 글자 크기를 변경할 수 있습니다.</h2>
+    <div id="memo" contenteditable="true"></div>
+    <div class="menu" id="menu">
+        <button id="small">10pt</button>
+        <button id="medium">15pt</button>
+        <button id="large">20pt</button>
+    </div>
+    <script>
+        const memo = document.getElementById("memo");
+        const menu = document.getElementById("menu");
+
+        memo.addEventListener("contextmenu", function(event) {
+            event.preventDefault();
+            menu.style.display = "block";
+            menu.style.left = event.pageX + "px";
+            menu.style.top = event.pageY + "px";
+        });
+
+        const buttons = document.querySelectorAll(".menu button");
+        buttons.forEach(function(button) {
+            button.addEventListener("click", function() {
+                memo.style.fontSize = this.innerHTML;
+                menu.style.display = "none";
+                memo.focus();
+            });
+        });
+
+        memo.addEventListener("keypress", function(event) {
+            if (event.keyCode === 13) {
+                document.execCommand("insertHTML", false, "<br><br>");
+                event.preventDefault();
+            }
+        });
+
+        memo.addEventListener("click", function(event) {
+            const range = document.createRange();
+            range.selectNodeContents(event.target);
+            const text = range.extractContents();
+            const span = document.createElement("span");
+            span.appendChild(text);
+            range.insertNode(span);
+            memo.querySelectorAll("span").forEach(function(span) {
+                span.addEventListener("click", function(event) {
+                    memo.querySelectorAll("span").forEach(function(span) {
+                        span.setAttribute("contenteditable", "false");
+                    });
+                    this.setAttribute("contenteditable", "true");
+                    this.focus();
+                });
+            });
+        });
+    </script>
+</body>
+</html>
