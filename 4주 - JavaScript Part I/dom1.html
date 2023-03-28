@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Eating egg</title>
+    <script>
+      window.onload = function () { // window.onload: 모든 코드가 다 실행된 이후에 함수가 실행되도록해라
+        // DOM 조작하기
+        let statusNum = 1;
+        const myParagraph = document.getElementById("my-paragraph");
+
+        myParagraph.innerHTML = "달걀 낳기를 누를 때마다 닭이 달걀을 낳습니다. 달걀을 먹으려면 달걀 먹기를 누르세요";
+        myParagraph.style.color = "red";
+
+        // 이벤트 처리 방법
+        const addButton = document.getElementById("add-button");
+
+        addButton.addEventListener("click", function () {
+          const actionStatus = document.getElementById("action-status");
+
+          let clickStatus = document.createElement("div");
+          clickStatus.setAttribute("class", "status");
+          clickStatus.innerHTML = "달걀이 " + String(statusNum) + "개 있습니다!";
+          statusNum += 1;
+          if(statusNum==6){
+            clickStatus.innerHTML = "닭이 미쳐날뛰고 있습니다!";
+          };
+
+          actionStatus.appendChild(clickStatus); //actionStatus에 clickStatus를 넣기
+        });
+
+        const delButton = document.getElementById("del-button");
+
+        delButton.addEventListener("click", function () {
+          const status = document.getElementsByClassName("status");
+          status[status.length - 1].remove();
+          statusNum -= 1;
+        });
+      };
+    </script>
+  </head>
+  <body>
+    <h1>달걀 먹을래?</h1>
+
+    <p id="my-paragraph">This is a sample paragraph.</p>
+    <button id="add-button">달걀 낳기</button>
+    <button id="del-button">달걀 먹기</button>
+    <p id="action-status">남은 달걀 개수 :</p>
+  </body>
+</html>
